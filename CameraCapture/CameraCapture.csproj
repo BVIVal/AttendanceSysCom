@@ -41,6 +41,9 @@
     <Reference Include="Emgu.CV.World.NetStandard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
       <HintPath>..\packages\Emgu.CV.4.2.0.3662\lib\netstandard2.0\Emgu.CV.World.NetStandard.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,7 +60,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\Settings.cs" />
     <Compile Include="CancellableExecutor.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\SynchronizeInvokeExtensions.cs" />
+    <Compile Include="MainWindow.Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ImageProcessing.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
@@ -67,6 +82,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\JsonUtilities.cs" />
+    <Compile Include="Utilities\ResourcesUtilities.cs" />
+    <Compile Include="Utilities\WritablePropertiesOnlyResolver.cs" />
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -94,8 +115,60 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Algorithms\haarcascade_eye.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_eye_tree_eyeglasses.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_frontalcatface.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_frontalcatface_extended.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_frontalface_alt.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_frontalface_alt2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_frontalface_alt_tree.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_frontalface_default.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_fullbody.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_lefteye_2splits.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_licence_plate_rus_16stages.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_lowerbody.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_profileface.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_righteye_2splits.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_russian_plate_number.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_smile.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Algorithms\haarcascade_upperbody.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="License-LGPL.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Emgu.CV.runtime.windows.4.2.0.3662\build\Emgu.CV.runtime.windows.targets" Condition="Exists('..\packages\Emgu.CV.runtime.windows.4.2.0.3662\build\Emgu.CV.runtime.windows.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

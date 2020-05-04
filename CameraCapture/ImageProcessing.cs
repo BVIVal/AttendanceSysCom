@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Emgu.CV;
+using Emgu.CV.Structure;
 
 namespace CameraCapture
 {
@@ -17,6 +18,7 @@ namespace CameraCapture
         public Mat GetFrames()
         {
             return Capture.QueryFrame();
+
         }
     }
 }
