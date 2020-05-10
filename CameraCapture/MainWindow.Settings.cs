@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using CameraCapture.Algorithms;
 using CameraCapture.Forms;
@@ -9,29 +10,33 @@ namespace CameraCapture
     {
         public const string SettingsPath = "settings/settings.json";
 
-        public void ShowSettings()
+        public async void ShowSettings()
         {
             try
             {
-                using (var form = new SettingsForm(Settings))
+                await Task.Run(() =>
                 {
-                    if(form.ShowDialog() != DialogResult.OK)
+                    //ToDo: non-optimal;
+                    LoadSettings();
+                    using (var form = new SettingsForm(Settings))
                     {
-                        LoadSettings();
-                        return;
-                    }
+                        if (form.ShowDialog() != DialogResult.OK)
+                        {
+                            LoadSettings();
+                            return;
+                        }
 
-                    SaveSettings();
-                }
+                        SaveSettings();
+                    }
+                });
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
-                throw;
+                MessageBox.Show($@"{nameof(ShowSettings)}. {exception.Message}");
             }
         }
 
-        public Settings Settings { get; set; } = new Settings();
+        public Settings Settings = new Settings();
 
         public double ScaleRate
         {

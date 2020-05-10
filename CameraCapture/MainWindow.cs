@@ -44,16 +44,18 @@ namespace CameraCapture
         {
             InitializeComponent();
             Source = new CancellableExecutor();
-            TestCapture = new ImageProcessing(Settings);
+            LoadSettings();
+            TestCapture = new ImageProcessing();
             cascadeClassifer = new CascadeClassifier(_chosenAlgorithm);
             hogDescriptor = new HOGDescriptor();
+            
         }
         
         private Task ProcessFrame()
         {
             try
             {
-                if (!TestCapture.TryCascadeRecognition(cascadeClassifer))
+                if (!TestCapture.TryCascadeRecognition(cascadeClassifer, Settings))
                     MessageBox.Show(@"TryCascadeRecognition - false");
                 FacesNum = $"Faces: {TestCapture.NumberOfFaces}";
                 

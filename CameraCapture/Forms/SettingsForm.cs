@@ -36,16 +36,12 @@ namespace CameraCapture.Forms
                 Settings.ScaleRate = ScaleComboBox.Text.ToDouble();
                 Settings.MinNeighbors = MinNeighborsComboBox.Text.ToInteger();
                 Settings.MinWindowSize = MinWindowSizeComboBox.Text.ToInteger();
-
-                DialogResult = DialogResult.OK;
-                Close();
+                
             }
             catch (Exception exception)
             {
                 MessageBox.Show($@"{nameof(SaveButton_Click)}. {exception}");
             }
-            
-
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -57,6 +53,23 @@ namespace CameraCapture.Forms
             catch (Exception exception)
             {
                 MessageBox.Show($@"{nameof(SaveButton_Click)}. {exception}");
+            }
+        }
+
+        private void OkButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Settings.ScaleRate = ScaleComboBox.Text.ToDouble();
+                Settings.MinNeighbors = MinNeighborsComboBox.Text.ToInteger();
+                Settings.MinWindowSize = MinWindowSizeComboBox.Text.ToInteger();
+
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($@"{nameof(OkButton_Click)}. {exception}");
             }
         }
     }

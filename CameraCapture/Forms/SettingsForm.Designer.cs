@@ -37,6 +37,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.SaveButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
+            this.OkButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,7 +51,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(246, 112);
+            this.groupBox1.Size = new System.Drawing.Size(268, 112);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
@@ -64,7 +65,7 @@
             "20",
             "25",
             "30"});
-            this.MinWindowSizeComboBox.Location = new System.Drawing.Point(159, 76);
+            this.MinWindowSizeComboBox.Location = new System.Drawing.Point(177, 76);
             this.MinWindowSizeComboBox.Name = "MinWindowSizeComboBox";
             this.MinWindowSizeComboBox.Size = new System.Drawing.Size(83, 21);
             this.MinWindowSizeComboBox.TabIndex = 5;
@@ -79,7 +80,7 @@
             "3",
             "4",
             "5"});
-            this.MinNeighborsComboBox.Location = new System.Drawing.Point(159, 48);
+            this.MinNeighborsComboBox.Location = new System.Drawing.Point(177, 49);
             this.MinNeighborsComboBox.Name = "MinNeighborsComboBox";
             this.MinNeighborsComboBox.Size = new System.Drawing.Size(83, 21);
             this.MinNeighborsComboBox.TabIndex = 4;
@@ -97,7 +98,7 @@
             "1.3",
             "1.35",
             "1.4"});
-            this.ScaleComboBox.Location = new System.Drawing.Point(159, 20);
+            this.ScaleComboBox.Location = new System.Drawing.Point(177, 21);
             this.ScaleComboBox.Name = "ScaleComboBox";
             this.ScaleComboBox.Size = new System.Drawing.Size(83, 21);
             this.ScaleComboBox.TabIndex = 3;
@@ -132,7 +133,7 @@
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(169, 131);
+            this.SaveButton.Location = new System.Drawing.Point(94, 131);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(90, 23);
             this.SaveButton.TabIndex = 1;
@@ -142,7 +143,7 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(88, 131);
+            this.CancelButton.Location = new System.Drawing.Point(13, 130);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(75, 23);
             this.CancelButton.TabIndex = 2;
@@ -150,11 +151,22 @@
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
+            // OkButton
+            // 
+            this.OkButton.Location = new System.Drawing.Point(190, 131);
+            this.OkButton.Name = "OkButton";
+            this.OkButton.Size = new System.Drawing.Size(90, 23);
+            this.OkButton.TabIndex = 3;
+            this.OkButton.Text = "OK";
+            this.OkButton.UseVisualStyleBackColor = true;
+            this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(276, 165);
+            this.ClientSize = new System.Drawing.Size(293, 165);
+            this.Controls.Add(this.OkButton);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.groupBox1);
@@ -179,5 +191,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button OkButton;
     }
 }
