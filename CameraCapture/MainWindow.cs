@@ -1,18 +1,12 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CameraCapture.Extensions;
 using CameraCapture.Utilities;
 using Emgu.CV;
-using Emgu;
-using Emgu.CV.CvEnum;
-using Emgu.CV.Dnn;
-using Emgu.Util;
-using Emgu.CV.Structure;
 
 namespace CameraCapture
 {
@@ -21,8 +15,9 @@ namespace CameraCapture
         #region Fields
 
         private int _camNumber = -1;
-        private CascadeClassifier cascadeClassifer;
-        private string _chosenAlgorithm = "Algorithms//haarcascade_frontalface_alt_tree.xml";
+        private List<CascadeClassifier> CascadeClassifierList { get; set; }
+        private string _chosenAlgorithm0 = "Algorithms//haarcascade_frontalface_alt_tree.xml";
+        private string _chosenAlgorithm1 = "Algorithms//haarcascade_profileface.xml";
 
         private HOGDescriptor hogDescriptor;
 
@@ -46,17 +41,22 @@ namespace CameraCapture
             Source = new CancellableExecutor();
             LoadSettings();
             TestCapture = new ImageProcessing();
-            cascadeClassifer = new CascadeClassifier(_chosenAlgorithm);
-            hogDescriptor = new HOGDescriptor();
-            
+            CascadeClassifierList = new List<CascadeClassifier>();
+            CascadeClassifierList.Add(new CascadeClassifier(_chosenAlgorithm0));
+            CascadeClassifierList.Add(new CascadeClassifier(_chosenAlgorithm1));
         }
         
         private Task ProcessFrame()
         {
             try
             {
-                if (!TestCapture.TryCascadeRecognition(cascadeClassifer, Settings))
-                    MessageBox.Show(@"TryCascadeRecognition - false");
+                var originalFrames = TestCapture.GetFrames();
+
+                if (!TestCapture.TryCascadeRecognition(originalFrames, CascadeClassifierList[0], Settings, Color.Blue))
+                    MessageBox.Show(@"TryCascadeRecognition 0- false");
+                if (!TestCapture.TryCascadeRecognition(TestCapture.ResultFrame.Mat, CascadeClassifierList[1], Settings, Color.Red))
+                    MessageBox.Show(@"TryCascadeRecognition 1- false");
+
                 FacesNum = $"Faces: {TestCapture.NumberOfFaces}";
                 
                 camImageBox.Image = TestCapture.ResultFrame;

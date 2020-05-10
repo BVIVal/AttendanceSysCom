@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Threading.Tasks;
 using CameraCapture.Algorithms;
 using Emgu.CV;
@@ -33,14 +32,14 @@ namespace CameraCapture
 
         #region Algorithms
 
-        public bool TryCascadeRecognition(CascadeClassifier cascadeClassifier, Settings settings)
+        public bool TryCascadeRecognition(Mat originalFrames, CascadeClassifier cascadeClassifier, Settings settings, Color color)
         {
             try
             {
-                var testOriginalFrames = GetFrames();
-                ResultFrame = testOriginalFrames.ToImage<Bgr, byte>();
+                //var testOriginalFrames = GetFrames();
+                ResultFrame = originalFrames.ToImage<Bgr, byte>();
                 var faces = cascadeClassifier.DetectMultiScale(
-                    testOriginalFrames.ToImage<Gray, byte>(),
+                    originalFrames.ToImage<Gray, byte>(),
                     settings.ScaleRate, settings.MinNeighbors,
                     new Size(settings.MinWindowSize, settings.MinWindowSize)
                 );
@@ -49,7 +48,7 @@ namespace CameraCapture
 
                 foreach (var face in faces)
                 {
-                    ResultFrame.Draw(face, new Bgr(Color.Blue), 4, LineType.FourConnected);
+                    ResultFrame.Draw(face, new Bgr(color), 4, LineType.FourConnected);
                 }
             }
             catch 
@@ -60,12 +59,12 @@ namespace CameraCapture
             return true;
         }
 
-        public bool TryHogDescriptor(HOGDescriptor hogDescriptor)
+        public bool TryHogDescriptor(Mat originalFrames, HOGDescriptor hogDescriptor)
         {
             try
             {
                 hogDescriptor.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
-                var regions = hogDescriptor.DetectMultiScale(GetFrames());
+                var regions = hogDescriptor.DetectMultiScale(originalFrames);
                 foreach (var pedestrain in regions)
                 {
                     ResultFrame.Draw(pedestrain.Rect, new Bgr(Color.Red), 1);
