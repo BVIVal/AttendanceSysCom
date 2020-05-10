@@ -10,6 +10,7 @@ using CameraCapture.Utilities;
 using Emgu.CV;
 using Emgu;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Dnn;
 using Emgu.Util;
 using Emgu.CV.Structure;
 
@@ -43,48 +44,20 @@ namespace CameraCapture
         {
             InitializeComponent();
             Source = new CancellableExecutor();
-            TestCapture = new ImageProcessing();
+            TestCapture = new ImageProcessing(Settings);
             cascadeClassifer = new CascadeClassifier(_chosenAlgorithm);
             hogDescriptor = new HOGDescriptor();
         }
-
+        
         private Task ProcessFrame()
         {
             try
             {
-                var testVar = TestCapture.GetFrames();
-                var resultFrame = testVar.ToImage<Bgr, byte>();
-                ///////
-                if (testVar != null)
-                {
-
-                    var faces = cascadeClassifer.DetectMultiScale(
-                        testVar.ToImage<Gray, byte>(), 
-                        Settings.ScaleRate, Settings.MinNeighbors, 
-                        new Size(Settings.MinWindowSize, Settings.MinWindowSize)
-                        );
-
-                    var numFacesLength = faces.Length;
-
-                    FacesNum = $"Faces: {numFacesLength}";
-                    
-                    foreach (var face in faces)
-                    {
-                        resultFrame.Draw(face, new Bgr(255, 0, 0), 4, LineType.FourConnected);
-                    }
-                    
-                }
-                //////
-                if (testVar != null)
-                {
-                    hogDescriptor.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
-                    var regions = hogDescriptor.DetectMultiScale(testVar);
-                    foreach (var pedestrain in regions)
-                    {
-                        resultFrame.Draw(pedestrain.Rect, new Bgr(Color.Red), 1);
-                    }
-                }
-                camImageBox.Image = resultFrame;
+                if (!TestCapture.TryCascadeRecognition(cascadeClassifer))
+                    MessageBox.Show(@"TryCascadeRecognition - false");
+                FacesNum = $"Faces: {TestCapture.NumberOfFaces}";
+                
+                camImageBox.Image = TestCapture.ResultFrame;
             }
             catch (Exception exception)
             {
@@ -201,5 +174,12 @@ namespace CameraCapture
                 MessageBox.Show($@"SaveAsJson - exception. {exception.Message}");
             }
         }
+
+        public void TestDnn()
+        {
+            //DnnInvoke.
+        }
     }
+
+    
 }
