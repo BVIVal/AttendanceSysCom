@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CameraCapture.Extensions;
+using CameraCapture.Modules;
 using CameraCapture.Utilities;
 using Emgu.CV;
 
@@ -15,24 +17,45 @@ namespace CameraCapture
         #region Fields
 
         private int _camNumber = -1;
+        private int _counter = 0;
+
+        /// <summary>
+        /// Resolution X.
+        /// </summary>
+        private int _resolutionX = 640;
+
+        /// <summary>
+        /// Resolution Y.
+        /// </summary>
+        private int _resolutionY = 480;
+
         private List<CascadeClassifier> CascadeClassifierList { get; set; }
         private string _chosenAlgorithm0 = "Algorithms//haarcascade_frontalface_alt_tree.xml";
         private string _chosenAlgorithm1 = "Algorithms//haarcascade_profileface.xml";
 
         private HOGDescriptor hogDescriptor;
 
+        
         #endregion
 
         #region Properties
 
-        private ImageProcessing TestCapture { get; }
+        private ImageProcessing CameraImage { get; }
         public CancellableExecutor Source { get; set; }
+        private DetectionModule Detector { get; set; }
 
         public string FacesNum
         {
             get => facesNumLabel.Text;
             set => this.InvokeIfRequired(_ => facesNumLabel.Text = $@"Status: {value}");
         }
+
+        public string Fps
+        {
+            get => fpsLabel.Text;
+            set => this.InvokeIfRequired(_ => fpsLabel.Text = $@"FPS: {value}");
+        }
+
         #endregion
 
         public MainWindow()
@@ -40,67 +63,75 @@ namespace CameraCapture
             InitializeComponent();
             Source = new CancellableExecutor();
             LoadSettings();
-            TestCapture = new ImageProcessing();
+            CameraImage = new ImageProcessing(_resolutionX, _resolutionY);
+
+            Detector = new DetectionModule(_resolutionX, _resolutionY, 0.5);
+
             CascadeClassifierList = new List<CascadeClassifier>();
             CascadeClassifierList.Add(new CascadeClassifier(_chosenAlgorithm0));
             CascadeClassifierList.Add(new CascadeClassifier(_chosenAlgorithm1));
         }
+
         
-        private Task ProcessFrame()
+        private void ProcessFrameEventTask(object sender, EventArgs e)
+        {
+            ProcessFrame();
+        }
+
+        private void ProcessFrame()
         {
             try
             {
-                var originalFrames = TestCapture.GetFrames();
-
-                if (!TestCapture.TryCascadeRecognition(originalFrames, CascadeClassifierList[0], Settings, Color.Blue))
-                    MessageBox.Show(@"TryCascadeRecognition 0- false");
-                if (!TestCapture.TryCascadeRecognition(TestCapture.ResultFrame.Mat, CascadeClassifierList[1], Settings, Color.Red))
-                    MessageBox.Show(@"TryCascadeRecognition 1- false");
-
-                FacesNum = $"Faces: {TestCapture.NumberOfFaces}";
+                var sw = new Stopwatch();
+                sw.Start();
+                //skip 2/3 of the frames, due to too much work on CPU
+                //if (_counter++ % 3 != 0) return Task.FromResult(true);
+                //var originalFrames = CameraImage.GetFrames();
                 
-                camImageBox.Image = TestCapture.ResultFrame;
+                var resultImage = Detector.GetDetectedFacesDnn(CameraImage.GetRetrieveImage());
+                camImageBox.Image = resultImage;
+
+                //var testDetector = DetectionModule.GetDetectedFaceBox()
+
+                //if (!CameraImage.TryCascadeRecognition(originalFrames, CascadeClassifierList[0], Settings, Color.Blue))
+                //    MessageBox.Show(@"TryCascadeRecognition 0- false");
+                //if (!CameraImage.TryCascadeRecognition(CameraImage.ResultFrame.Mat, CascadeClassifierList[1], Settings, Color.Red))
+                //    MessageBox.Show(@"TryCascadeRecognition 1- false");
+
+                FacesNum = $"Faces: {CameraImage.NumberOfFaces}";
+
+                Fps = $@"{sw.Elapsed}";
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
                 throw;
             }
-            return Task.FromResult(true);
 
         }
 
-        private async void btnStart_Click(object sender, EventArgs e)
+        private void btnStart_Click(object sender, EventArgs e)
         {
-            if (TestCapture.Capture == null) return;
+            if (CameraImage.Capture == null) return;
 
             if (btnStart.Text == @"Pause")
             {
                 btnStart.Text = @"Resume";
-                Source.Cancel();
+                CameraImage.Capture.ImageGrabbed -= ProcessFrameEventTask;
+                CameraImage.Capture.Stop();
             }
             else
             {
                 btnStart.Text = @"Pause";
-                await Task.Run(async () =>
-                {
-                    do
-                    {
-                        await ProcessFrame();
-                        if (!Source.IsCancellationRequested()) continue;
-                        Source.Restart();
-                        break;
-                    } while (true);
-
-                    return true;
-                }, Source.Token);
+                CameraImage.Capture.Start();
+                CameraImage.Capture.ImageGrabbed += ProcessFrameEventTask;
             }
-            TestCapture.CaptureInProgress = !TestCapture.CaptureInProgress;
+            CameraImage.CaptureInProgress = !CameraImage.CaptureInProgress;
         }
 
         private void ReleaseData()
         {
-            TestCapture.Capture?.Dispose();
+            CameraImage.Capture?.Dispose();
         }
 
         private async void cbCamIndex_SelectedIndexChanged(object sender, EventArgs e)
@@ -111,11 +142,11 @@ namespace CameraCapture
                 return;
             }
 
-            if (TestCapture.Capture == null)
+            if (CameraImage.Capture == null)
             {
                 try
                 {
-                    await Task.Run(() => TestCapture.CreateVideoCapture(_camNumber));
+                    await Task.Run(() => CameraImage.CreateVideoCapture(_camNumber));
                 }
                 catch (NullReferenceException exception)
                 {
@@ -177,11 +208,9 @@ namespace CameraCapture
             }
         }
 
-        public void TestDnn()
-        {
-            //DnnInvoke.
-        }
-    }
 
-    
+
+
+
+    }
 }
