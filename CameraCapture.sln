@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30021.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraCapture", "CameraCapture\CameraCapture.csproj", "{DF45EBDD-26A0-4153-832F-27F8BE29AB30}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraFaceDetection", "..\..\..\Desktop\CSharpWpfAIExamples-master\CSharpWpfAIExamples-master\CameraFaceDetection\CameraFaceDetection.csproj", "{CDD6A2FA-E09D-4041-934F-351677039927}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonCollection", "..\..\..\Desktop\CSharpWpfAIExamples-master\CSharpWpfAIExamples-master\CommonCollection\CommonCollection.csproj", "{859E519A-9070-44EC-AA32-A853400DFF34}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{DF45EBDD-26A0-4153-832F-27F8BE29AB30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF45EBDD-26A0-4153-832F-27F8BE29AB30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF45EBDD-26A0-4153-832F-27F8BE29AB30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD6A2FA-E09D-4041-934F-351677039927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD6A2FA-E09D-4041-934F-351677039927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD6A2FA-E09D-4041-934F-351677039927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD6A2FA-E09D-4041-934F-351677039927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{859E519A-9070-44EC-AA32-A853400DFF34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{859E519A-9070-44EC-AA32-A853400DFF34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{859E519A-9070-44EC-AA32-A853400DFF34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{859E519A-9070-44EC-AA32-A853400DFF34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
