@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using CameraCapture.Algorithms;
 using CameraCapture.Utilities;
 using Emgu.CV;
@@ -46,7 +47,8 @@ namespace CameraCapture.Modules
 
         private readonly Net detector;
         private readonly double minConfidence;
-
+        public List<Image<Bgr,byte>> RoiList { get; private set; }
+        public int NumberOfFaces { get; set; }
         #endregion
 
         public DetectionModule(int resolutionX, int resolutionY, double minConfidence)
@@ -60,6 +62,8 @@ namespace CameraCapture.Modules
             xRate = resolutionX / (float) detectionSize;
             yRate = resolutionY / (float) detectionSize;
 
+            NumberOfFaces = -1;
+            RoiList = new List<Image<Bgr, byte>>();
             detector = GetDetectorDnn();
             this.minConfidence = minConfidence;
         }
@@ -76,16 +80,20 @@ namespace CameraCapture.Modules
             if (!IsResolutionCorrect(originalImage))
                 throw new ArgumentException($"Not equal resolution exception: {nameof(originalImage)}");
             var resultImage = originalImage.Clone();
+            RoiList.Clear();
 
             var blobs = DnnInvoke.BlobFromImage(resultImage, 1.0, new Size(detectionSize, detectionSize));
             detector.SetInput(blobs);
             var detectedRectangles = GetDetectedRectangles(detector.Forward());
-
+            
             foreach (var detectedRectangle in detectedRectangles)
             {
                 resultImage.Draw(detectedRectangle, new Bgr(Color.GreenYellow));
+                
+                RoiList.Add(resultImage.Copy(detectedRectangle));
             }
 
+            NumberOfFaces = RoiList.Count;
             return resultImage;
         }
 
@@ -125,7 +133,7 @@ namespace CameraCapture.Modules
         }
 
         //ToDo: rework settings & return type
-        public Tuple<Image<Bgr, byte>, int> TryCascadeRecognition(Mat originalFrames,
+        public IList<(Image<Bgr,byte> resultImage, int numberOfFaces)> TryCascadeRecognition(Mat originalFrames,
             CascadeClassifier cascadeClassifier, Settings settings, Color color)
         {
             try
@@ -137,19 +145,18 @@ namespace CameraCapture.Modules
                     new Size(settings.MinWindowSize, settings.MinWindowSize)
                 );
 
-                var numberOfFaces = faces.Length;
+                var localNumberOfFaces = faces.Length;
 
                 foreach (var face in faces)
                 {
                     resultFrame.Draw(face, new Bgr(color), 4, LineType.FourConnected);
                 }
-
-                return new Tuple<Image<Bgr, byte>, int>(resultFrame, numberOfFaces);
+                return new List<(Image<Bgr, byte> resultImage, int numberOfFaces)>{(resultFrame,localNumberOfFaces)};
             }
             catch
             {
                 //ignore
-                return null;
+                return new List<(Image<Bgr, byte> resultImage, int numberOfFaces)>();
             }
 
         }

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CameraCapture.Extensions;
 using CameraCapture.Modules;
 using CameraCapture.Utilities;
 using Emgu.CV;
+using Emgu.CV.Structure;
+using DateTime = System.DateTime;
 
 namespace CameraCapture
 {
@@ -29,12 +31,15 @@ namespace CameraCapture
         /// </summary>
         private int _resolutionY = 480;
 
+        //ToDo: create ConfigClass
         private List<CascadeClassifier> CascadeClassifierList { get; set; }
         private string _chosenAlgorithm0 = "Algorithms//haarcascade_frontalface_alt_tree.xml";
         private string _chosenAlgorithm1 = "Algorithms//haarcascade_profileface.xml";
+        private string _trainedModelPath = "Embeddings_";
+        public const string _archivePath = "Archive/";
 
         private HOGDescriptor hogDescriptor;
-
+        private bool IsSnapshotRequested = false;
         
         #endregion
 
@@ -43,6 +48,7 @@ namespace CameraCapture
         private ImageProcessing CameraImage { get; }
         public CancellableExecutor Source { get; set; }
         private DetectionModule Detector { get; set; }
+        private RecognitionModule Recognizer { get; set; }
 
         public string FacesNum
         {
@@ -88,26 +94,58 @@ namespace CameraCapture
                 //if (_counter++ % 3 != 0) return Task.FromResult(true);
                 //var originalFrames = CameraImage.GetFrames();
                 
-                var resultImage = Detector.GetDetectedFacesDnn(CameraImage.GetRetrieveImage());
-                camImageBox.Image = resultImage;
+                var resultImageDetector = Detector.GetDetectedFacesDnn(CameraImage.GetRetrieveImage());
+                if(IsSnapshotRequested)
+                {
+                    IsSnapshotRequested = false;
+                    SaveSnapshotToFile(_archivePath + $@"0000_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}.jpg", resultImageDetector.ToJpegData());
+                    SaveRoiToFileJpg(_archivePath + $@"0001_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}", Detector.RoiList);
 
-                //var testDetector = DetectionModule.GetDetectedFaceBox()
+                }
 
-                //if (!CameraImage.TryCascadeRecognition(originalFrames, CascadeClassifierList[0], Settings, Color.Blue))
-                //    MessageBox.Show(@"TryCascadeRecognition 0- false");
-                //if (!CameraImage.TryCascadeRecognition(CameraImage.ResultFrame.Mat, CascadeClassifierList[1], Settings, Color.Red))
-                //    MessageBox.Show(@"TryCascadeRecognition 1- false");
-
-                FacesNum = $"Faces: {CameraImage.NumberOfFaces}";
-
+                camImageBox.Image = resultImageDetector;
+                FacesNum = $"Faces: {Detector.NumberOfFaces}";
                 Fps = $@"{sw.Elapsed}";
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
-                throw;
             }
 
+        }
+
+        public void Train()
+        {
+            CameraImage.Capture.Stop();
+            //ToDo: add Console.WriteLine("[INFO] Model exists, loading");
+            //Recognizer.Train();
+        }
+
+        private void SaveRoiToFileJpg(string path, IEnumerable<Image<Bgr, byte>> roiList, bool onlyWritable = true)
+        {
+            foreach (var roi in roiList.Select((value, i) => new {i, value}))
+            {
+                SaveSnapshotToFile(path + $"_{roi.i}.jpg", roi.value.ToJpegData());
+            }
+        }
+
+        //ToDo: check if cloning is necessary; Think about BinaryWriter + FileStream
+        private void SaveSnapshotToFile(string path, object value, bool onlyWritable = true)
+        {
+            try
+            {
+                var folder = Path.GetDirectoryName(path);
+                if (folder != null)
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                File.WriteAllBytes(path, (byte[])value);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show($@"SaveSnapshotToFile - exception. {exception.Message}");
+            }
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -208,9 +246,9 @@ namespace CameraCapture
             }
         }
 
-
-
-
-
+        private void BtnGetSnapshot_Click(object sender, EventArgs e)
+        {
+            IsSnapshotRequested = true;
+        }
     }
 }

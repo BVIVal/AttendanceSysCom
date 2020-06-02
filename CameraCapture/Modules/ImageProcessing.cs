@@ -18,7 +18,6 @@ namespace CameraCapture.Modules
         private int resolutionY;
         public VideoCapture Capture { get; private set; } 
         public bool CaptureInProgress { get; set; }
-        public int NumberOfFaces { get; set; }
         public Image<Bgr, byte> ResultFrame { get; set; }
 
         public Image<Bgr, byte> OriginalFrame;
@@ -28,7 +27,7 @@ namespace CameraCapture.Modules
             if (resolutionX <= 0) throw new ArgumentOutOfRangeException(nameof(resolutionX));
             if (resolutionY <= 0) throw new ArgumentOutOfRangeException(nameof(resolutionY));
 
-            NumberOfFaces = -1;
+            
             this.resolutionX = resolutionX;
             this.resolutionY = resolutionY;
             OriginalFrame = new Image<Bgr, byte>(this.resolutionX, this.resolutionY);
@@ -36,6 +35,7 @@ namespace CameraCapture.Modules
 
         public Task CreateVideoCapture(int camNumber = 0)
         {
+            //ToDo: add 'setCaptureProperty' like: fps, height, width
             Capture = new VideoCapture(camNumber);
             return Task.FromResult(Capture != null);
         }

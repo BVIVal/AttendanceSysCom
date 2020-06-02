@@ -38,6 +38,7 @@
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fpsLabel = new System.Windows.Forms.Label();
+            this.BtnGetSnapshot = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.camImageBox)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -127,11 +128,22 @@
             this.fpsLabel.TabIndex = 7;
             this.fpsLabel.Text = "FPS: None";
             // 
+            // BtnGetSnapshot
+            // 
+            this.BtnGetSnapshot.Location = new System.Drawing.Point(13, 343);
+            this.BtnGetSnapshot.Name = "BtnGetSnapshot";
+            this.BtnGetSnapshot.Size = new System.Drawing.Size(96, 23);
+            this.BtnGetSnapshot.TabIndex = 8;
+            this.BtnGetSnapshot.Text = "Get snapshot";
+            this.BtnGetSnapshot.UseVisualStyleBackColor = true;
+            this.BtnGetSnapshot.Click += new System.EventHandler(this.BtnGetSnapshot_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(597, 358);
+            this.ClientSize = new System.Drawing.Size(597, 377);
+            this.Controls.Add(this.BtnGetSnapshot);
             this.Controls.Add(this.fpsLabel);
             this.Controls.Add(this.facesNumLabel);
             this.Controls.Add(this.camImageBox);
@@ -161,5 +173,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.Label fpsLabel;
+        private System.Windows.Forms.Button BtnGetSnapshot;
     }
 }
