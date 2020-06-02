@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraFaceDetection", "..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonCollection", "..\..\..\Desktop\CSharpWpfAIExamples-master\CSharpWpfAIExamples-master\CommonCollection\CommonCollection.csproj", "{859E519A-9070-44EC-AA32-A853400DFF34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraCapture.Tests", "CameraCapture.Tests\CameraCapture.Tests.csproj", "{CCF87908-2745-4EAA-847D-1A744894B68F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{859E519A-9070-44EC-AA32-A853400DFF34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{859E519A-9070-44EC-AA32-A853400DFF34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{859E519A-9070-44EC-AA32-A853400DFF34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCF87908-2745-4EAA-847D-1A744894B68F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCF87908-2745-4EAA-847D-1A744894B68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCF87908-2745-4EAA-847D-1A744894B68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCF87908-2745-4EAA-847D-1A744894B68F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
