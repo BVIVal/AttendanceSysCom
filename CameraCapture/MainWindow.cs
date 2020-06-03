@@ -98,7 +98,7 @@ namespace CameraCapture
                 if(IsSnapshotRequested)
                 {
                     IsSnapshotRequested = false;
-                    SaveSnapshotToFile(_archivePath + $@"0000_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}.jpg", resultImageDetector.ToJpegData());
+                    SaveRoiToFileJpg(_archivePath + $@"0000_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}.jpg", new[] {resultImageDetector});
                     SaveRoiToFileJpg(_archivePath + $@"0001_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}", Detector.RoiList);
 
                 }
@@ -109,6 +109,7 @@ namespace CameraCapture
             }
             catch (Exception exception)
             {
+                //ToDo: make logs
                 Console.WriteLine(exception);
             }
 
@@ -125,12 +126,13 @@ namespace CameraCapture
         {
             foreach (var roi in roiList.Select((value, i) => new {i, value}))
             {
-                SaveSnapshotToFile(path + $"_{roi.i}.jpg", roi.value.ToJpegData());
+                var normalizedImage = HistogramEqualization(roi.value);
+                SaveBytesToFile(path + $"_{roi.i}.jpg", normalizedImage.ToJpegData());
             }
         }
 
         //ToDo: check if cloning is necessary; Think about BinaryWriter + FileStream
-        private void SaveSnapshotToFile(string path, object value, bool onlyWritable = true)
+        private void SaveBytesToFile(string path, object value, bool onlyWritable = true)
         {
             try
             {
@@ -146,6 +148,17 @@ namespace CameraCapture
             {
                 MessageBox.Show($@"SaveSnapshotToFile - exception. {exception.Message}");
             }
+        }
+
+        private Image<Bgr, byte> HistogramEqualization(Image<Bgr, byte> image)
+        {
+            var imageYcc = image.Convert<Ycc, byte>();
+
+            var channelY = imageYcc[0];
+            channelY._EqualizeHist();
+            imageYcc[0] = channelY;
+
+            return imageYcc.Convert<Bgr, byte>();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
