@@ -46,12 +46,14 @@ namespace CameraCapture.Modules
         private float yRate = 1.0f;
 
         private readonly Net detector;
-        private readonly double minConfidence;
+        
         public List<Image<Bgr,byte>> RoiList { get; private set; }
         public int NumberOfFaces { get; set; }
+
+        public Size RoiResizeValue { get; private set; }
         #endregion
 
-        public DetectionModule(int resolutionX, int resolutionY, double minConfidence)
+        public DetectionModule(int resolutionX, int resolutionY)
         {
             if (resolutionX <= 0) throw new ArgumentOutOfRangeException(nameof(resolutionX));
             if (resolutionY <= 0) throw new ArgumentOutOfRangeException(nameof(resolutionY));
@@ -65,7 +67,8 @@ namespace CameraCapture.Modules
             NumberOfFaces = -1;
             RoiList = new List<Image<Bgr, byte>>();
             detector = GetDetectorDnn();
-            this.minConfidence = minConfidence;
+           
+            RoiResizeValue = new Size(113, 146);
         }
 
         private static Net GetDetectorDnn()
@@ -75,8 +78,39 @@ namespace CameraCapture.Modules
             return DnnInvoke.ReadNetFromCaffe(proto, model);
         }
 
-        public Image<Bgr, byte> GetDetectedFacesDnn(Image<Bgr, byte> originalImage)
+        //public Image<Bgr, byte> GetDetectedFacesDnn(Image<Bgr, byte> originalImage)
+        //{
+        //    if (!IsResolutionCorrect(originalImage))
+        //        throw new ArgumentException($"Not equal resolution exception: {nameof(originalImage)}");
+        //    var resultImage = originalImage.Clone();
+        //    RoiList.Clear();
+
+        //    var blobs = DnnInvoke.BlobFromImage(resultImage, 1.0, new Size(detectionSize, detectionSize));
+        //    detector.SetInput(blobs);
+        //    var detectedRectangles = GetDetectedRectangles(detector.Forward());
+            
+        //    foreach (var detectedRectangle in detectedRectangles)
+        //    {
+        //        resultImage.Draw(detectedRectangle, new Bgr(Color.GreenYellow));
+                
+        //        RoiList.Add(resultImage.Copy(detectedRectangle));
+        //    }
+
+        //    NumberOfFaces = RoiList.Count;
+        //    return resultImage;
+        //}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="originalBgrMat"> Get only Mat and Image'Bgr,byte'</param>
+        /// <returns></returns>
+        public Image<Bgr, byte> GetDetectedFacesDnn(IInputArray originalBgrMat) 
         {
+            var mat = originalBgrMat as Mat;
+            var originalImage = originalBgrMat as Image<Bgr, byte> ?? mat?.ToImage<Bgr, byte>();
+            if (originalImage == null) throw new ArgumentNullException();
+
             if (!IsResolutionCorrect(originalImage))
                 throw new ArgumentException($"Not equal resolution exception: {nameof(originalImage)}");
             var resultImage = originalImage.Clone();
@@ -85,11 +119,11 @@ namespace CameraCapture.Modules
             var blobs = DnnInvoke.BlobFromImage(resultImage, 1.0, new Size(detectionSize, detectionSize));
             detector.SetInput(blobs);
             var detectedRectangles = GetDetectedRectangles(detector.Forward());
-            
+
             foreach (var detectedRectangle in detectedRectangles)
             {
                 resultImage.Draw(detectedRectangle, new Bgr(Color.GreenYellow));
-                
+
                 RoiList.Add(resultImage.Copy(detectedRectangle));
             }
 
