@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CameraCapture.Extensions;
+using CameraCapture.FileStorage;
 using CameraCapture.Modules;
 using CameraCapture.Utilities;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Newtonsoft.Json.Linq;
 using DateTime = System.DateTime;
 
 namespace CameraCapture
@@ -17,6 +22,11 @@ namespace CameraCapture
     public partial class MainWindow : Form
     {
         #region Fields
+
+        private const string trainedModelPath = "Embeddings.trained";
+        private bool hasTrainedModel = false;
+        private readonly double minConfidence;
+
 
         private int _camNumber = -1;
         private int _counter = 0;
@@ -40,7 +50,13 @@ namespace CameraCapture
 
         private HOGDescriptor hogDescriptor;
         private bool IsSnapshotRequested = false;
-        
+        //private bool IsRecognitionEnabled = false;
+        private LabelMap labelMap;
+
+        private Size RoiSize { get; set; }
+
+        //private readonly ITrainDataDAL trainDataDAL;
+
         #endregion
 
         #region Properties
@@ -49,6 +65,9 @@ namespace CameraCapture
         public CancellableExecutor Source { get; set; }
         private DetectionModule Detector { get; set; }
         private RecognitionModule Recognizer { get; set; }
+        private ITrainDataDAL TrainDataDAL { get; set; }
+
+        private event EventHandler<Mat> PersonDetected; 
 
         public string FacesNum
         {
@@ -62,6 +81,13 @@ namespace CameraCapture
             set => this.InvokeIfRequired(_ => fpsLabel.Text = $@"FPS: {value}");
         }
 
+        public string Log
+        {
+            set => this.InvokeIfRequired(_ => LogListBox.Items.Add($@"{value}"));
+        }
+
+        public bool IsRecognitionEnabled => EnableRecognitionCheckBox.Checked;
+
         #endregion
 
         public MainWindow()
@@ -71,11 +97,17 @@ namespace CameraCapture
             LoadSettings();
             CameraImage = new ImageProcessing(_resolutionX, _resolutionY);
 
-            Detector = new DetectionModule(_resolutionX, _resolutionY, 0.5);
+            Detector = new DetectionModule(_resolutionX, _resolutionY);
+            Recognizer = new RecognitionModule(RecognitionModuleEnum.LbphFaceRecognizer);
+            TrainDataDAL = new FileSystemDAL(_archivePath);
+            labelMap = new LabelMap(TrainDataDAL.GetLabelMap());
+            minConfidence = 100; // 100 - LBPH
 
             CascadeClassifierList = new List<CascadeClassifier>();
             CascadeClassifierList.Add(new CascadeClassifier(_chosenAlgorithm0));
             CascadeClassifierList.Add(new CascadeClassifier(_chosenAlgorithm1));
+
+            PersonDetected += OnPersonDetected;
         }
 
         
@@ -84,6 +116,7 @@ namespace CameraCapture
             ProcessFrame();
         }
 
+        //ToDo: separate AddToDb from ProcessFrame
         private void ProcessFrame()
         {
             try
@@ -94,16 +127,22 @@ namespace CameraCapture
                 //if (_counter++ % 3 != 0) return Task.FromResult(true);
                 //var originalFrames = CameraImage.GetFrames();
                 
-                var resultImageDetector = Detector.GetDetectedFacesDnn(CameraImage.GetRetrieveImage());
+                var imageWithDetections = Detector.GetDetectedFacesDnn(CameraImage.GetRetrieveImage());
                 if(IsSnapshotRequested)
                 {
                     IsSnapshotRequested = false;
-                    SaveRoiToFileJpg(_archivePath + $@"0000_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}.jpg", new[] {resultImageDetector});
-                    SaveRoiToFileJpg(_archivePath + $@"0001_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}", Detector.RoiList);
-
+                    AddToDB(Detector.RoiList, Detector.RoiResizeValue, imageWithDetections);
                 }
 
-                camImageBox.Image = resultImageDetector;
+                if (IsRecognitionEnabled)
+                { 
+                    foreach (var image in Detector.RoiList)
+                    {
+                        PersonDetected?.Invoke(this, image.Mat);
+                    }
+                }
+
+                camImageBox.Image = imageWithDetections;
                 FacesNum = $"Faces: {Detector.NumberOfFaces}";
                 Fps = $@"{sw.Elapsed}";
             }
@@ -115,50 +154,99 @@ namespace CameraCapture
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="mat"> Cropped image. Send DetectorModule.ListOfRois</param>
+        private void OnPersonDetected(object sender, Mat mat)
+        {
+            if (!IsRecognitionEnabled) return;
+            var predictionInfo = Predict(ImageUtilities.ResizeMat(mat, Detector.RoiResizeValue));
+            if (predictionInfo.distance < minConfidence)
+            {
+                Debug.WriteLine($@"Label: {predictionInfo.label}. Confidence: {predictionInfo.distance}");
+                Log = $@"Label: {predictionInfo.label}. Confidence: {predictionInfo.distance}. Time: {DateTime.Now.ToLongTimeString()}.";
+            }
+            else Debug.WriteLine($@"LabelFailed: {predictionInfo.label}. Confidence: {predictionInfo.distance}");
+        }
+
+        private (double distance, string label) Predict(Mat mat)
+        {
+            if (!hasTrainedModel) EnsureTrained(true);
+
+            var prediction = Recognizer.Predict(ImageUtilities.ToGrayScale(mat));
+            return (prediction.Distance, labelMap.ReverseMap[prediction.Label]);
+        }
+
+        //ToDo: Check if model already Trained and trigger on ForceRetrainingRequested
+        public void EnsureTrained(bool isForceRetraining = false)
+        {
+            if (hasTrainedModel && !isForceRetraining)
+            {
+                Console.WriteLine(@"[INFO] Model has been trained already");
+                return;
+            }
+            if (File.Exists(trainedModelPath))
+            {
+                Console.WriteLine(@"[INFO] Model exists, loading");
+                Recognizer.Load(trainedModelPath);
+            }
+            else
+            {
+                Console.WriteLine(@"[INFO] Model doesn't exist, started training");
+                Train();
+            }
+
+            hasTrainedModel = true;
+        }
+
         public void Train()
         {
-            CameraImage.Capture.Stop();
-            //ToDo: add Console.WriteLine("[INFO] Model exists, loading");
-            //Recognizer.Train();
-        }
-
-        private void SaveRoiToFileJpg(string path, IEnumerable<Image<Bgr, byte>> roiList, bool onlyWritable = true)
-        {
-            foreach (var roi in roiList.Select((value, i) => new {i, value}))
+            CameraImage.Capture.Pause();
+            var images = TrainDataDAL.GetImages().ToList();
+            labelMap = new LabelMap(TrainDataDAL.GetLabelMap());
+            var faceEmbeddings = images
+                .Select(img => (labelMap.Map[img.Label], ImageUtilities.BytesToBgrMat(img.Image)))
+                .Where(tuple => tuple.Item2 != null)
+                .ToList();
+            if (faceEmbeddings.Any())
             {
-                var normalizedImage = HistogramEqualization(roi.value);
-                SaveBytesToFile(path + $"_{roi.i}.jpg", normalizedImage.ToJpegData());
+                Recognizer.Train(faceEmbeddings, trainedModelPath);
             }
+
+            //ToDo: encapsulation of start/stop VideoCapture
+            if(btnStart.Text == @"Pause") CameraImage.Capture.Start();
+            hasTrainedModel = false;
         }
 
-        //ToDo: check if cloning is necessary; Think about BinaryWriter + FileStream
-        private void SaveBytesToFile(string path, object value, bool onlyWritable = true)
+        //ToDo: How to make it Async!!! ConfigureAwait(false)?
+        // ReSharper disable once InconsistentNaming
+        private static void AddToDB(IEnumerable<Image<Bgr, byte>> roiList, Size imageSize, Image<Bgr, byte> originalResultImage = null)
         {
             try
             {
-                var folder = Path.GetDirectoryName(path);
-                if (folder != null)
+                if (originalResultImage != null)
                 {
-                    Directory.CreateDirectory(folder);
+                    ImageUtilities.SaveRoiToFileJpg(_archivePath + $@"0000_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}",
+                        new[] { originalResultImage });
                 }
 
-                File.WriteAllBytes(path, (byte[])value);
+                NormalizeAndSafe(roiList, imageSize);
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                MessageBox.Show($@"SaveSnapshotToFile - exception. {exception.Message}");
+                Console.WriteLine(e);
+                //throw;
             }
         }
 
-        private Image<Bgr, byte> HistogramEqualization(Image<Bgr, byte> image)
+        //ToDo: Replace to ImageUtilities
+        private static void NormalizeAndSafe(IEnumerable<Image<Bgr, byte>> roiList, Size imageSize)
         {
-            var imageYcc = image.Convert<Ycc, byte>();
-
-            var channelY = imageYcc[0];
-            channelY._EqualizeHist();
-            imageYcc[0] = channelY;
-
-            return imageYcc.Convert<Bgr, byte>();
+            var localRoiList = roiList.ToList();
+            ImageUtilities.SaveRoiToFileJpg(_archivePath + $@"0001_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}", localRoiList, imageSize);
+            ImageUtilities.SaveRoiToFileJpg(_archivePath + $@"0002_{DateTime.Now:dd_MM_yyyy__HH_mm_ss}", ImageUtilities.FlipImagesHorizontal(localRoiList), imageSize);
         }
 
         private void btnStart_Click(object sender, EventArgs e)

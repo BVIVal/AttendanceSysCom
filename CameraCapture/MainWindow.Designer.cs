@@ -39,6 +39,9 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fpsLabel = new System.Windows.Forms.Label();
             this.BtnGetSnapshot = new System.Windows.Forms.Button();
+            this.EnableRecognitionCheckBox = new System.Windows.Forms.CheckBox();
+            this.LogListBox = new System.Windows.Forms.ListBox();
+            this.LogLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.camImageBox)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -46,7 +49,7 @@
             // btnStart
             // 
             this.btnStart.Enabled = false;
-            this.btnStart.Location = new System.Drawing.Point(466, 27);
+            this.btnStart.Location = new System.Drawing.Point(660, 27);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(121, 23);
             this.btnStart.TabIndex = 1;
@@ -57,7 +60,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(466, 53);
+            this.label1.Location = new System.Drawing.Point(660, 53);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 13);
             this.label1.TabIndex = 2;
@@ -69,7 +72,7 @@
             this.cbCamIndex.Items.AddRange(new object[] {
             "0",
             "1"});
-            this.cbCamIndex.Location = new System.Drawing.Point(466, 69);
+            this.cbCamIndex.Location = new System.Drawing.Point(660, 69);
             this.cbCamIndex.Name = "cbCamIndex";
             this.cbCamIndex.Size = new System.Drawing.Size(121, 21);
             this.cbCamIndex.TabIndex = 3;
@@ -80,7 +83,7 @@
             this.camImageBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.camImageBox.Location = new System.Drawing.Point(12, 27);
             this.camImageBox.Name = "camImageBox";
-            this.camImageBox.Size = new System.Drawing.Size(448, 309);
+            this.camImageBox.Size = new System.Drawing.Size(640, 480);
             this.camImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.camImageBox.TabIndex = 2;
             this.camImageBox.TabStop = false;
@@ -88,7 +91,7 @@
             // facesNumLabel
             // 
             this.facesNumLabel.AutoSize = true;
-            this.facesNumLabel.Location = new System.Drawing.Point(466, 102);
+            this.facesNumLabel.Location = new System.Drawing.Point(660, 101);
             this.facesNumLabel.Name = "facesNumLabel";
             this.facesNumLabel.Size = new System.Drawing.Size(68, 13);
             this.facesNumLabel.TabIndex = 5;
@@ -100,7 +103,7 @@
             this.menuToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(597, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(794, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -122,7 +125,7 @@
             // fpsLabel
             // 
             this.fpsLabel.AutoSize = true;
-            this.fpsLabel.Location = new System.Drawing.Point(466, 126);
+            this.fpsLabel.Location = new System.Drawing.Point(660, 125);
             this.fpsLabel.Name = "fpsLabel";
             this.fpsLabel.Size = new System.Drawing.Size(59, 13);
             this.fpsLabel.TabIndex = 7;
@@ -130,7 +133,7 @@
             // 
             // BtnGetSnapshot
             // 
-            this.BtnGetSnapshot.Location = new System.Drawing.Point(13, 343);
+            this.BtnGetSnapshot.Location = new System.Drawing.Point(662, 326);
             this.BtnGetSnapshot.Name = "BtnGetSnapshot";
             this.BtnGetSnapshot.Size = new System.Drawing.Size(96, 23);
             this.BtnGetSnapshot.TabIndex = 8;
@@ -138,11 +141,42 @@
             this.BtnGetSnapshot.UseVisualStyleBackColor = true;
             this.BtnGetSnapshot.Click += new System.EventHandler(this.BtnGetSnapshot_Click);
             // 
+            // EnableRecognitionCheckBox
+            // 
+            this.EnableRecognitionCheckBox.AutoSize = true;
+            this.EnableRecognitionCheckBox.Location = new System.Drawing.Point(660, 153);
+            this.EnableRecognitionCheckBox.Name = "EnableRecognitionCheckBox";
+            this.EnableRecognitionCheckBox.Size = new System.Drawing.Size(119, 17);
+            this.EnableRecognitionCheckBox.TabIndex = 9;
+            this.EnableRecognitionCheckBox.Text = "Enable Recognition";
+            this.EnableRecognitionCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // LogListBox
+            // 
+            this.LogListBox.FormattingEnabled = true;
+            this.LogListBox.HorizontalScrollbar = true;
+            this.LogListBox.Location = new System.Drawing.Point(662, 225);
+            this.LogListBox.Name = "LogListBox";
+            this.LogListBox.Size = new System.Drawing.Size(120, 95);
+            this.LogListBox.TabIndex = 10;
+            // 
+            // LogLabel
+            // 
+            this.LogLabel.AutoSize = true;
+            this.LogLabel.Location = new System.Drawing.Point(663, 206);
+            this.LogLabel.Name = "LogLabel";
+            this.LogLabel.Size = new System.Drawing.Size(28, 13);
+            this.LogLabel.TabIndex = 11;
+            this.LogLabel.Text = "Log:";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(597, 377);
+            this.ClientSize = new System.Drawing.Size(794, 516);
+            this.Controls.Add(this.LogLabel);
+            this.Controls.Add(this.LogListBox);
+            this.Controls.Add(this.EnableRecognitionCheckBox);
             this.Controls.Add(this.BtnGetSnapshot);
             this.Controls.Add(this.fpsLabel);
             this.Controls.Add(this.facesNumLabel);
@@ -174,5 +208,8 @@
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.Label fpsLabel;
         private System.Windows.Forms.Button BtnGetSnapshot;
+        private System.Windows.Forms.CheckBox EnableRecognitionCheckBox;
+        private System.Windows.Forms.ListBox LogListBox;
+        private System.Windows.Forms.Label LogLabel;
     }
 }

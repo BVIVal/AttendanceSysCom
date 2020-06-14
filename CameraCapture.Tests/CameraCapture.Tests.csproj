@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Emgu.CV.World.NetStandard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <HintPath>..\packages\Emgu.CV.4.2.0.3662\lib\netstandard2.0\Emgu.CV.World.NetStandard.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.1.1\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
@@ -47,13 +50,148 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="RecognitionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ResourcesUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Models\res10_300x300_ssd_iter_140000.caffemodel" />
+    <EmbeddedResource Include="Models\deploy.prototxt" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CameraCapture\CameraCapture.csproj">
+      <Project>{df45ebdd-26a0-4153-832f-27f8be29ab30}</Project>
+      <Name>CameraCapture</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Archive\Egor\0001_14_06_2020__20_35_51_0.jpg" />
+    <Content Include="Archive\Egor\0001_14_06_2020__20_36_09_0.jpg" />
+    <Content Include="Archive\Egor\0001_14_06_2020__20_36_16_0.jpg" />
+    <Content Include="Archive\Egor\0001_14_06_2020__20_36_22_0.jpg" />
+    <Content Include="Archive\Egor\0001_14_06_2020__20_36_33_0.jpg" />
+    <Content Include="Archive\Egor\0001_14_06_2020__20_36_39_0.jpg" />
+    <Content Include="Archive\Egor\0001_14_06_2020__20_36_48_0.jpg" />
+    <Content Include="Archive\Egor\0001_14_06_2020__20_36_54_0.jpg" />
+    <Content Include="Archive\Egor\0002_14_06_2020__20_35_51_0.jpg" />
+    <Content Include="Archive\Egor\0002_14_06_2020__20_36_09_0.jpg" />
+    <Content Include="Archive\Egor\0002_14_06_2020__20_36_16_0.jpg" />
+    <Content Include="Archive\Egor\0002_14_06_2020__20_36_22_0.jpg" />
+    <Content Include="Archive\Egor\0002_14_06_2020__20_36_33_0.jpg" />
+    <Content Include="Archive\Egor\0002_14_06_2020__20_36_39_0.jpg" />
+    <Content Include="Archive\Egor\0002_14_06_2020__20_36_48_0.jpg" />
+    <Content Include="Archive\Egor\0002_14_06_2020__20_36_54_0.jpg" />
+    <Content Include="Archive\Olya\0001_09_06_2020__13_12_43_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0001_09_06_2020__13_13_45_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0001_09_06_2020__13_14_17_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0001_09_06_2020__13_15_26_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0001_09_06_2020__13_15_52_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0001_09_06_2020__13_16_29_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0002_09_06_2020__13_12_43_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0002_09_06_2020__13_13_45_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0002_09_06_2020__13_14_17_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0002_09_06_2020__13_15_26_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0002_09_06_2020__13_15_52_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Olya\0002_09_06_2020__13_16_29_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_38_50_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_38_59_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_39_04_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_39_14_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_39_24_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_39_33_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_39_39_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_39_52_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_39_58_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_40_05_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0001_08_06_2020__15_40_11_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_38_50_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_38_59_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_39_04_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_39_14_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_39_24_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_39_33_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_39_39_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_39_52_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_39_58_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_40_05_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Archive\Valentin\0002_08_06_2020__15_40_11_0.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="TestImages\Valentin\Valentin_2.jpg" />
+    <EmbeddedResource Include="TestImages\Egor\Egor_1.png" />
+    <EmbeddedResource Include="TestImages\Olya\Olya_1.jpg" />
+    <EmbeddedResource Include="TestImages\Valentin\Valentin_1.jpg" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

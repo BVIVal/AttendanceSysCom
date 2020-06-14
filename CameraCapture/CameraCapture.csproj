@@ -64,6 +64,11 @@
     <Compile Include="CancellableExecutor.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\SynchronizeInvokeExtensions.cs" />
+    <Compile Include="FileStorage\FileSystemDAL.cs" />
+    <Compile Include="FileStorage\IImageDAL.cs" />
+    <Compile Include="FileStorage\ImageLabel.cs" />
+    <Compile Include="FileStorage\ITrainDataDAL.cs" />
+    <Compile Include="FileStorage\LabelMap.cs" />
     <Compile Include="MainWindow.Settings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,7 +90,9 @@
     <Compile Include="Modules\RecognitionModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ImageUtilities.cs" />
     <Compile Include="Utilities\JsonUtilities.cs" />
+    <Compile Include="Utilities\PathUtilities.cs" />
     <Compile Include="Utilities\ResourcesUtilities.cs" />
     <Compile Include="Utilities\WritablePropertiesOnlyResolver.cs" />
     <EmbeddedResource Include="Forms\SettingsForm.resx">
