@@ -44,6 +44,7 @@ namespace CameraCapture.Modules
             return Capture.QueryFrame();
         }
 
+        //ToDo: use smooth filter
         public Image<Bgr,byte> GetRetrieveImage()
         {
             Capture.Retrieve(OriginalFrame);
