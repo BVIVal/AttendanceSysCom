@@ -42,6 +42,8 @@
             this.EnableRecognitionCheckBox = new System.Windows.Forms.CheckBox();
             this.LogListBox = new System.Windows.Forms.ListBox();
             this.LogLabel = new System.Windows.Forms.Label();
+            this.EnterZoneButton = new System.Windows.Forms.Button();
+            this.ExitZoneButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.camImageBox)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -87,6 +89,7 @@
             this.camImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.camImageBox.TabIndex = 2;
             this.camImageBox.TabStop = false;
+            this.camImageBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.CamImageBox_MouseUp);
             // 
             // facesNumLabel
             // 
@@ -133,7 +136,7 @@
             // 
             // BtnGetSnapshot
             // 
-            this.BtnGetSnapshot.Location = new System.Drawing.Point(662, 326);
+            this.BtnGetSnapshot.Location = new System.Drawing.Point(662, 349);
             this.BtnGetSnapshot.Name = "BtnGetSnapshot";
             this.BtnGetSnapshot.Size = new System.Drawing.Size(96, 23);
             this.BtnGetSnapshot.TabIndex = 8;
@@ -155,7 +158,7 @@
             // 
             this.LogListBox.FormattingEnabled = true;
             this.LogListBox.HorizontalScrollbar = true;
-            this.LogListBox.Location = new System.Drawing.Point(662, 225);
+            this.LogListBox.Location = new System.Drawing.Point(662, 248);
             this.LogListBox.Name = "LogListBox";
             this.LogListBox.Size = new System.Drawing.Size(120, 95);
             this.LogListBox.TabIndex = 10;
@@ -163,17 +166,39 @@
             // LogLabel
             // 
             this.LogLabel.AutoSize = true;
-            this.LogLabel.Location = new System.Drawing.Point(663, 206);
+            this.LogLabel.Location = new System.Drawing.Point(663, 229);
             this.LogLabel.Name = "LogLabel";
             this.LogLabel.Size = new System.Drawing.Size(28, 13);
             this.LogLabel.TabIndex = 11;
             this.LogLabel.Text = "Log:";
+            // 
+            // EnterZoneButton
+            // 
+            this.EnterZoneButton.Location = new System.Drawing.Point(660, 178);
+            this.EnterZoneButton.Name = "EnterZoneButton";
+            this.EnterZoneButton.Size = new System.Drawing.Size(50, 50);
+            this.EnterZoneButton.TabIndex = 12;
+            this.EnterZoneButton.Text = "Enter Zone";
+            this.EnterZoneButton.UseVisualStyleBackColor = true;
+            this.EnterZoneButton.Click += new System.EventHandler(this.EnterZoneButton_Click);
+            // 
+            // ExitZoneButton
+            // 
+            this.ExitZoneButton.Location = new System.Drawing.Point(731, 178);
+            this.ExitZoneButton.Name = "ExitZoneButton";
+            this.ExitZoneButton.Size = new System.Drawing.Size(50, 50);
+            this.ExitZoneButton.TabIndex = 13;
+            this.ExitZoneButton.Text = "Exit Zone";
+            this.ExitZoneButton.UseVisualStyleBackColor = true;
+            this.ExitZoneButton.Click += new System.EventHandler(this.ExitZoneButton_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 516);
+            this.Controls.Add(this.ExitZoneButton);
+            this.Controls.Add(this.EnterZoneButton);
             this.Controls.Add(this.LogLabel);
             this.Controls.Add(this.LogListBox);
             this.Controls.Add(this.EnableRecognitionCheckBox);
@@ -188,7 +213,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainWindow";
             this.Text = "MainWindow";
-            this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.camImageBox)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -211,5 +235,7 @@
         private System.Windows.Forms.CheckBox EnableRecognitionCheckBox;
         private System.Windows.Forms.ListBox LogListBox;
         private System.Windows.Forms.Label LogLabel;
+        private System.Windows.Forms.Button EnterZoneButton;
+        private System.Windows.Forms.Button ExitZoneButton;
     }
 }

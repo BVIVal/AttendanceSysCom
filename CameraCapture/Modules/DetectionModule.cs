@@ -12,7 +12,7 @@ using Emgu.CV.Structure;
 
 namespace CameraCapture.Modules
 {
-    public class DetectionModule
+    public class DetectionModule : IZoneModule
     {
         #region Fields  
 
@@ -49,7 +49,7 @@ namespace CameraCapture.Modules
         
         public List<Image<Bgr,byte>> RoiList { get; private set; }
         public int NumberOfFaces { get; set; }
-
+        public ZoneModule AreaModule { get; set; }
         public Size RoiResizeValue { get; private set; }
         #endregion
 
@@ -69,6 +69,7 @@ namespace CameraCapture.Modules
             detector = GetDetectorDnn();
            
             RoiResizeValue = new Size(113, 146);
+            AreaModule = new ZoneModule();
         }
 
         private static Net GetDetectorDnn()
@@ -77,28 +78,6 @@ namespace CameraCapture.Modules
             var model = ResourcesUtilities.GetResourceBytes("res10_300x300_ssd_iter_140000.caffemodel");
             return DnnInvoke.ReadNetFromCaffe(proto, model);
         }
-
-        //public Image<Bgr, byte> GetDetectedFacesDnn(Image<Bgr, byte> originalImage)
-        //{
-        //    if (!IsResolutionCorrect(originalImage))
-        //        throw new ArgumentException($"Not equal resolution exception: {nameof(originalImage)}");
-        //    var resultImage = originalImage.Clone();
-        //    RoiList.Clear();
-
-        //    var blobs = DnnInvoke.BlobFromImage(resultImage, 1.0, new Size(detectionSize, detectionSize));
-        //    detector.SetInput(blobs);
-        //    var detectedRectangles = GetDetectedRectangles(detector.Forward());
-            
-        //    foreach (var detectedRectangle in detectedRectangles)
-        //    {
-        //        resultImage.Draw(detectedRectangle, new Bgr(Color.GreenYellow));
-                
-        //        RoiList.Add(resultImage.Copy(detectedRectangle));
-        //    }
-
-        //    NumberOfFaces = RoiList.Count;
-        //    return resultImage;
-        //}
 
         /// <summary>
         /// 

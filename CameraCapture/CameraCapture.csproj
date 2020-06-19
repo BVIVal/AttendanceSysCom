@@ -79,6 +79,7 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Modules\DetectionModule.cs" />
+    <Compile Include="Modules\IZoneModule.cs" />
     <Compile Include="Modules\RecognitionModuleEnum.cs" />
     <Compile Include="Modules\ImageProcessing.cs" />
     <Compile Include="MainWindow.cs">
@@ -88,6 +89,8 @@
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Modules\RecognitionModule.cs" />
+    <Compile Include="Modules\ZoneModule.cs" />
+    <Compile Include="Modules\ZoneModuleEnum.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ImageUtilities.cs" />

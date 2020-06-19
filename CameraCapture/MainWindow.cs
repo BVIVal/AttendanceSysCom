@@ -27,7 +27,6 @@ namespace CameraCapture
         private bool hasTrainedModel = false;
         private readonly double minConfidence;
 
-
         private int _camNumber = -1;
         private int _counter = 0;
 
@@ -42,32 +41,28 @@ namespace CameraCapture
         private int _resolutionY = 480;
 
         //ToDo: create ConfigClass
-        private List<CascadeClassifier> CascadeClassifierList { get; set; }
-        private string _chosenAlgorithm0 = "Algorithms//haarcascade_frontalface_alt_tree.xml";
-        private string _chosenAlgorithm1 = "Algorithms//haarcascade_profileface.xml";
         private string _trainedModelPath = "Embeddings_";
         public const string _archivePath = "Archive/";
-
         private HOGDescriptor hogDescriptor;
         private bool IsSnapshotRequested = false;
-        //private bool IsRecognitionEnabled = false;
         private LabelMap labelMap;
 
-        private Size RoiSize { get; set; }
+        #endregion
 
-        //private readonly ITrainDataDAL trainDataDAL;
+        #region Events
+
+        private event EventHandler<Mat> PersonDetected;
 
         #endregion
 
         #region Properties
-
+        private Size RoiSize { get; set; }
+        private List<Point> ShapePoints { get; set; }
         private ImageProcessing CameraImage { get; }
         public CancellableExecutor Source { get; set; }
         private DetectionModule Detector { get; set; }
         private RecognitionModule Recognizer { get; set; }
         private ITrainDataDAL TrainDataDAL { get; set; }
-
-        private event EventHandler<Mat> PersonDetected; 
 
         public string FacesNum
         {
@@ -86,6 +81,8 @@ namespace CameraCapture
             set => this.InvokeIfRequired(_ => LogListBox.Items.Add($@"{value}"));
         }
 
+        private ZoneModuleEnum Zone { get; set; }
+
         public bool IsRecognitionEnabled => EnableRecognitionCheckBox.Checked;
 
         #endregion
@@ -102,18 +99,18 @@ namespace CameraCapture
             TrainDataDAL = new FileSystemDAL(_archivePath);
             labelMap = new LabelMap(TrainDataDAL.GetLabelMap());
             minConfidence = 100; // 100 - LBPH
-
-            CascadeClassifierList = new List<CascadeClassifier>();
-            CascadeClassifierList.Add(new CascadeClassifier(_chosenAlgorithm0));
-            CascadeClassifierList.Add(new CascadeClassifier(_chosenAlgorithm1));
+            ShapePoints = new List<Point>();
 
             PersonDetected += OnPersonDetected;
+            Zone = ZoneModuleEnum.None;
         }
 
         
         private void ProcessFrameEventTask(object sender, EventArgs e)
         {
             ProcessFrame();
+            if (Detector.AreaModule.IsEnterPointsNumMax) Detector.AreaModule.OnPaintShapeEnter(camImageBox);
+            if (Detector.AreaModule.IsExitPointsNumMax) Detector.AreaModule.OnPaintShapeExit(camImageBox);
         }
 
         //ToDo: separate AddToDb from ProcessFrame
@@ -163,12 +160,9 @@ namespace CameraCapture
         {
             if (!IsRecognitionEnabled) return;
             var predictionInfo = Predict(ImageUtilities.ResizeMat(mat, Detector.RoiResizeValue));
-            if (predictionInfo.distance < minConfidence)
-            {
-                Debug.WriteLine($@"Label: {predictionInfo.label}. Confidence: {predictionInfo.distance}");
-                Log = $@"Label: {predictionInfo.label}. Confidence: {predictionInfo.distance}. Time: {DateTime.Now.ToLongTimeString()}.";
-            }
-            else Debug.WriteLine($@"LabelFailed: {predictionInfo.label}. Confidence: {predictionInfo.distance}");
+            Log = predictionInfo.distance < minConfidence 
+                ? $@"Label: {predictionInfo.label}. Confidence: {predictionInfo.distance}. Time: {DateTime.Now.ToLongTimeString()}." 
+                : $@"LabelFailed: {predictionInfo.label}. Confidence: {predictionInfo.distance}";
         }
 
         private (double distance, string label) Predict(Mat mat)
@@ -184,17 +178,17 @@ namespace CameraCapture
         {
             if (hasTrainedModel && !isForceRetraining)
             {
-                Console.WriteLine(@"[INFO] Model has been trained already");
+                Log = @"[INFO] Model has been trained already";
                 return;
             }
             if (File.Exists(trainedModelPath))
             {
-                Console.WriteLine(@"[INFO] Model exists, loading");
+                Log = @"[INFO] Model exists, loading";
                 Recognizer.Load(trainedModelPath);
             }
             else
             {
-                Console.WriteLine(@"[INFO] Model doesn't exist, started training");
+                Log = @"[INFO] Model doesn't exist, started training";
                 Train();
             }
 
@@ -297,11 +291,6 @@ namespace CameraCapture
             btnStart.Enabled = true;
         }
 
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowSettings();
@@ -350,6 +339,47 @@ namespace CameraCapture
         private void BtnGetSnapshot_Click(object sender, EventArgs e)
         {
             IsSnapshotRequested = true;
+        }
+
+        #region Area-Triger 
+
+        //ToDo: is it possible to use event here instead of "if" expression?
+        private void CamImageBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    switch (Zone)
+                    {
+                        case ZoneModuleEnum.EnterZone:
+                            Detector.AreaModule.AddEnterPoint(e.Location);
+                            break;
+                        case ZoneModuleEnum.ExitZone:
+                            Detector.AreaModule.AddExitPoint(e.Location);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        private void CamImageBox_Paint(object sender, PaintEventArgs e)
+        {
+        }
+        #endregion
+
+        private void EnterZoneButton_Click(object sender, EventArgs e)
+        {
+            Zone = ZoneModuleEnum.EnterZone;
+        }
+
+        private void ExitZoneButton_Click(object sender, EventArgs e)
+        {
+            Zone = ZoneModuleEnum.ExitZone;
         }
     }
 }

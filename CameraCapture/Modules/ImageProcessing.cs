@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 
 namespace CameraCapture.Modules
 {
-    public class ImageProcessing
+    public class ImageProcessing : IDisposable
     {
+        #region Fields
         /// <summary>
         /// Resolution X.
         /// </summary>
@@ -16,11 +18,17 @@ namespace CameraCapture.Modules
         /// Resolution Y.
         /// </summary>
         private int resolutionY;
-        public VideoCapture Capture { get; private set; } 
-        public bool CaptureInProgress { get; set; }
-        public Image<Bgr, byte> ResultFrame { get; set; }
-
         public Image<Bgr, byte> OriginalFrame;
+
+        #endregion
+
+        #region Properties
+        public VideoCapture Capture { get; private set; }
+        
+        public bool CaptureInProgress { get; set; }
+
+        #endregion
+
 
         public ImageProcessing(int resolutionX, int resolutionY)
         {
@@ -31,6 +39,7 @@ namespace CameraCapture.Modules
             this.resolutionX = resolutionX;
             this.resolutionY = resolutionY;
             OriginalFrame = new Image<Bgr, byte>(this.resolutionX, this.resolutionY);
+            
         }
 
         public Task CreateVideoCapture(int camNumber = 0)
@@ -51,5 +60,24 @@ namespace CameraCapture.Modules
             return OriginalFrame;
         }
 
+        public void Start()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Stop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Pause()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
