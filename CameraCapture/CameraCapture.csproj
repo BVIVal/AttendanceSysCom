@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\Settings.cs" />
     <Compile Include="CancellableExecutor.cs" />
+    <Compile Include="Common\DetectorResult.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\SynchronizeInvokeExtensions.cs" />
     <Compile Include="FileStorage\FileSystemDAL.cs" />
@@ -185,6 +186,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="License-LGPL.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GraphicLibrary\GraphicLibrary.csproj">
+      <Project>{037dde25-ef4f-4d95-8281-d17bcfdb91c5}</Project>
+      <Name>GraphicLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

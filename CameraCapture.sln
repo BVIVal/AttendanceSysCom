@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonCollection", "..\..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraCapture.Tests", "CameraCapture.Tests\CameraCapture.Tests.csproj", "{CCF87908-2745-4EAA-847D-1A744894B68F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicLibrary", "GraphicLibrary\GraphicLibrary.csproj", "{037DDE25-EF4F-4D95-8281-D17BCFDB91C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicLibrary.Tests", "GraphicLibrary.Tests\GraphicLibrary.Tests.csproj", "{A91E2545-532B-4FF5-BC24-81388C387AE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{CCF87908-2745-4EAA-847D-1A744894B68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCF87908-2745-4EAA-847D-1A744894B68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCF87908-2745-4EAA-847D-1A744894B68F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{037DDE25-EF4F-4D95-8281-D17BCFDB91C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{037DDE25-EF4F-4D95-8281-D17BCFDB91C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{037DDE25-EF4F-4D95-8281-D17BCFDB91C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{037DDE25-EF4F-4D95-8281-D17BCFDB91C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A91E2545-532B-4FF5-BC24-81388C387AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A91E2545-532B-4FF5-BC24-81388C387AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A91E2545-532B-4FF5-BC24-81388C387AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A91E2545-532B-4FF5-BC24-81388C387AE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

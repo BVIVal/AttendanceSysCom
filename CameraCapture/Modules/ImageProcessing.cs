@@ -9,14 +9,7 @@ namespace CameraCapture.Modules
     public class ImageProcessing : IDisposable
     {
         #region Fields
-        /// <summary>
-        /// Resolution X.
-        /// </summary>
         private int resolutionX;
-
-        /// <summary>
-        /// Resolution Y.
-        /// </summary>
         private int resolutionY;
         public Image<Bgr, byte> OriginalFrame;
 
@@ -24,23 +17,27 @@ namespace CameraCapture.Modules
 
         #region Properties
         public VideoCapture Capture { get; private set; }
-        
         public bool CaptureInProgress { get; set; }
 
         #endregion
 
+        #region Id
+        public string ImageProcessingId;
+
+        #endregion
 
         public ImageProcessing(int resolutionX, int resolutionY)
         {
             if (resolutionX <= 0) throw new ArgumentOutOfRangeException(nameof(resolutionX));
             if (resolutionY <= 0) throw new ArgumentOutOfRangeException(nameof(resolutionY));
 
-            
             this.resolutionX = resolutionX;
             this.resolutionY = resolutionY;
             OriginalFrame = new Image<Bgr, byte>(this.resolutionX, this.resolutionY);
-            
+            ImageProcessingId = GenerateId();
         }
+
+        private static string GenerateId() => $"{DateTime.UtcNow.ToLongTimeString()}_{Guid.NewGuid()}";
 
         public Task CreateVideoCapture(int camNumber = 0)
         {

@@ -44,10 +44,10 @@ namespace CameraCapture.Tests
             var testImageMat = ImageUtilities.BytesToBgrMat(testImageBytes);
 
             var detector = new DetectionModule(testImageMat.Width, testImageMat.Height);
-            detector.GetDetectedFacesDnn(testImageMat);
+            detector.GetDetectedFacesDnn(testImageMat, "1");
            
-            foreach (var predictionInfo in detector.RoiList.Select(image => 
-                Predict(recognizer, mainLabelMap, ImageUtilities.ResizeMat(image.Mat, detector.RoiResizeValue))))
+            foreach (var predictionInfo in detector.DetectorResults.Select(detectorResult => 
+                Predict(recognizer, mainLabelMap, ImageUtilities.ResizeMat(detectorResult.Image.Mat, detector.RoiResizeValue))))
             {
                 Debug.WriteLine(predictionInfo.distance >= confidence
                     ? $@"Label: {predictionInfo.label}. Confidence: {predictionInfo.distance}"
