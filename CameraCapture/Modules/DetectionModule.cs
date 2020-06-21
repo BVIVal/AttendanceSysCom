@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using CameraCapture.Algorithms;
+using CameraCapture.Common;
 using CameraCapture.Utilities;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Structure;
+
 
 namespace CameraCapture.Modules
 {
@@ -47,7 +50,7 @@ namespace CameraCapture.Modules
 
         private readonly Net detector;
         
-        public List<Image<Bgr,byte>> RoiList { get; private set; }
+        public List<DetectorResult> DetectorResults { get; set; }
         public int NumberOfFaces { get; set; }
         public ZoneModule AreaModule { get; set; }
         public Size RoiResizeValue { get; private set; }
@@ -65,11 +68,12 @@ namespace CameraCapture.Modules
             yRate = resolutionY / (float) detectionSize;
 
             NumberOfFaces = -1;
-            RoiList = new List<Image<Bgr, byte>>();
             detector = GetDetectorDnn();
            
             RoiResizeValue = new Size(113, 146);
             AreaModule = new ZoneModule();
+
+            DetectorResults = new List<DetectorResult>();
         }
 
         private static Net GetDetectorDnn()
@@ -84,7 +88,7 @@ namespace CameraCapture.Modules
         /// </summary>
         /// <param name="originalBgrMat"> Get only Mat and Image'Bgr,byte'</param>
         /// <returns></returns>
-        public Image<Bgr, byte> GetDetectedFacesDnn(IInputArray originalBgrMat) 
+        public Image<Bgr, byte> GetDetectedFacesDnn(IInputArray originalBgrMat, string imageProcessingId) 
         {
             var mat = originalBgrMat as Mat;
             var originalImage = originalBgrMat as Image<Bgr, byte> ?? mat?.ToImage<Bgr, byte>();
@@ -93,7 +97,7 @@ namespace CameraCapture.Modules
             if (!IsResolutionCorrect(originalImage))
                 throw new ArgumentException($"Not equal resolution exception: {nameof(originalImage)}");
             var resultImage = originalImage.Clone();
-            RoiList.Clear();
+            DetectorResults.Clear();
 
             var blobs = DnnInvoke.BlobFromImage(resultImage, 1.0, new Size(detectionSize, detectionSize));
             detector.SetInput(blobs);
@@ -102,11 +106,15 @@ namespace CameraCapture.Modules
             foreach (var detectedRectangle in detectedRectangles)
             {
                 resultImage.Draw(detectedRectangle, new Bgr(Color.GreenYellow));
-
-                RoiList.Add(resultImage.Copy(detectedRectangle));
+                DetectorResults.Add(new DetectorResult
+                {
+                    Image = resultImage.Copy(detectedRectangle), 
+                    Zone = CheckZone(detectedRectangle),
+                    ImageProcessingId = imageProcessingId
+                });
             }
 
-            NumberOfFaces = RoiList.Count;
+            NumberOfFaces = DetectorResults.Count;
             return resultImage;
         }
 
@@ -201,5 +209,15 @@ namespace CameraCapture.Modules
             return originalImage.Width == resolutionX && originalImage.Height == resolutionY;
         }
 
+        private ZoneModuleEnum CheckZone(Rectangle roiRectangle)
+        {
+            var roiLocation = ImageUtilities.PointsFromRectangle(roiRectangle);
+            Debug.WriteLine($"{roiLocation[0]} | {roiLocation[3]}");
+            if (GraphicLibrary.IntersectionUtilities.IsInZone(AreaModule.GetEnterPointsList(), roiLocation)) 
+                return ZoneModuleEnum.EnterZone;
+            return GraphicLibrary.IntersectionUtilities.IsInZone(AreaModule.GetExitPointsList(), roiLocation) 
+                ? ZoneModuleEnum.ExitZone 
+                : ZoneModuleEnum.None;
+        }
     }
 }

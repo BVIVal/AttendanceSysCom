@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CameraCapture.Common;
 using CameraCapture.Extensions;
 using CameraCapture.FileStorage;
 using CameraCapture.Modules;
@@ -51,7 +52,7 @@ namespace CameraCapture
 
         #region Events
 
-        private event EventHandler<Mat> PersonDetected;
+        private event EventHandler<DetectorResult> PersonDetected;
 
         #endregion
 
@@ -124,18 +125,19 @@ namespace CameraCapture
                 //if (_counter++ % 3 != 0) return Task.FromResult(true);
                 //var originalFrames = CameraImage.GetFrames();
                 
-                var imageWithDetections = Detector.GetDetectedFacesDnn(CameraImage.GetRetrieveImage());
+                var imageWithDetections = Detector.GetDetectedFacesDnn(CameraImage.GetRetrieveImage(), CameraImage.ImageProcessingId);
                 if(IsSnapshotRequested)
                 {
                     IsSnapshotRequested = false;
-                    AddToDB(Detector.RoiList, Detector.RoiResizeValue, imageWithDetections);
+                    AddToDB(Detector.DetectorResults.Select(i => i.Image), Detector.RoiResizeValue, imageWithDetections);
                 }
 
                 if (IsRecognitionEnabled)
                 { 
-                    foreach (var image in Detector.RoiList)
+                    foreach (var detectorResult in Detector.DetectorResults)
                     {
-                        PersonDetected?.Invoke(this, image.Mat);
+                        //ToDo: Parallel invoke?
+                        PersonDetected?.Invoke(this, detectorResult);
                     }
                 }
 
@@ -155,14 +157,14 @@ namespace CameraCapture
         /// 
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="mat"> Cropped image. Send DetectorModule.ListOfRois</param>
-        private void OnPersonDetected(object sender, Mat mat)
+        /// <param name="detectorResult"></param>
+        private void OnPersonDetected(object sender, DetectorResult detectorResult)
         {
             if (!IsRecognitionEnabled) return;
-            var predictionInfo = Predict(ImageUtilities.ResizeMat(mat, Detector.RoiResizeValue));
+            var predictionInfo = Predict(ImageUtilities.ResizeMat(detectorResult.Image.Mat, Detector.RoiResizeValue));
             Log = predictionInfo.distance < minConfidence 
-                ? $@"Label: {predictionInfo.label}. Confidence: {predictionInfo.distance}. Time: {DateTime.Now.ToLongTimeString()}." 
-                : $@"LabelFailed: {predictionInfo.label}. Confidence: {predictionInfo.distance}";
+                ? $@"Zone: {detectorResult.Zone}. Label: {predictionInfo.label}. Confidence: {predictionInfo.distance}. Time: {DateTime.Now.ToLongTimeString()}." 
+                : $@"Zone: {detectorResult.Zone}. LabelFailed: {predictionInfo.label}. Confidence: {predictionInfo.distance}";
         }
 
         private (double distance, string label) Predict(Mat mat)
@@ -367,9 +369,6 @@ namespace CameraCapture
 
         }
 
-        private void CamImageBox_Paint(object sender, PaintEventArgs e)
-        {
-        }
         #endregion
 
         private void EnterZoneButton_Click(object sender, EventArgs e)

@@ -87,5 +87,22 @@ namespace CameraCapture.Utilities
             return greyMat;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rectangle"></param>
+        /// <returns></returns>
+        public static List<Point> PointsFromRectangle(Rectangle rectangle)
+        {
+            var size = rectangle.Size;
+
+            var leftUpperPoint = rectangle.Location;
+            var rightUpperPoint = new Point(leftUpperPoint.X + size.Width, leftUpperPoint.Y);
+
+            var leftBottomPoint = new Point(leftUpperPoint.X, leftUpperPoint.Y + size.Height);
+            var rightBottomPoint = new Point(leftUpperPoint.X + size.Width, leftUpperPoint.Y + size.Height);
+
+            return new List<Point> { leftUpperPoint, rightUpperPoint, leftBottomPoint, rightBottomPoint }; ;
+        }
     }
 }

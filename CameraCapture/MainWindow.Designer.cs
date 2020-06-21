@@ -86,7 +86,7 @@
             this.camImageBox.Location = new System.Drawing.Point(12, 27);
             this.camImageBox.Name = "camImageBox";
             this.camImageBox.Size = new System.Drawing.Size(640, 480);
-            this.camImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.camImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.camImageBox.TabIndex = 2;
             this.camImageBox.TabStop = false;
             this.camImageBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.CamImageBox_MouseUp);

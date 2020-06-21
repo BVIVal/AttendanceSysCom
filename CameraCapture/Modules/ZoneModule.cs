@@ -27,6 +27,9 @@ namespace CameraCapture.Modules
             ClearShapeExit();
         }
 
+        public List<Point> GetEnterPointsList() => ShapeEnter;
+        public List<Point> GetExitPointsList() => ShapeExit;
+
         public void AddEnterPoint(Point point)
         {
             if (ShapeEnter.Count == MaxPointsNum) ClearShapeEnter();
@@ -82,9 +85,6 @@ namespace CameraCapture.Modules
             graphics.FillPolygon(new SolidBrush(Color2Transparent(Color.DarkRed)), ShapeExit.ToArray());
         }
 
-        private static Color Color2Transparent(Color c)
-        {
-            return Color.FromArgb(128, c.R, c.G, c.B);
-        }
+        private static Color Color2Transparent(Color c) => Color.FromArgb(128, c.R, c.G, c.B);
     }
 }
