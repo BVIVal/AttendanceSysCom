@@ -102,7 +102,7 @@ namespace CameraCapture.Utilities
             var leftBottomPoint = new Point(leftUpperPoint.X, leftUpperPoint.Y + size.Height);
             var rightBottomPoint = new Point(leftUpperPoint.X + size.Width, leftUpperPoint.Y + size.Height);
 
-            return new List<Point> { leftUpperPoint, rightUpperPoint, leftBottomPoint, rightBottomPoint }; ;
+            return new List<Point> { leftUpperPoint, rightUpperPoint, rightBottomPoint, leftBottomPoint }; ;
         }
     }
 }
