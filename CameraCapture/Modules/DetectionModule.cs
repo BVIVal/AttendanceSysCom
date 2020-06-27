@@ -87,6 +87,7 @@ namespace CameraCapture.Modules
         /// 
         /// </summary>
         /// <param name="originalBgrMat"> Get only Mat and Image'Bgr,byte'</param>
+        /// <param name="imageProcessingId"></param>
         /// <returns></returns>
         public Image<Bgr, byte> GetDetectedFacesDnn(IInputArray originalBgrMat, string imageProcessingId) 
         {
@@ -110,7 +111,8 @@ namespace CameraCapture.Modules
                 {
                     Image = resultImage.Copy(detectedRectangle), 
                     Zone = CheckZone(detectedRectangle),
-                    ImageProcessingId = imageProcessingId
+                    ImageProcessingId = imageProcessingId, 
+                    Time = DateTime.Now
                 });
             }
 
