@@ -41,11 +41,15 @@
     <Reference Include="Emgu.CV.World.NetStandard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
       <HintPath>..\packages\Emgu.CV.4.2.0.3662\lib\netstandard2.0\Emgu.CV.World.NetStandard.dll</HintPath>
     </Reference>
+    <Reference Include="LiteDB, Version=5.0.8.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.5.0.8\lib\net45\LiteDB.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,7 +66,10 @@
   <ItemGroup>
     <Compile Include="Algorithms\Settings.cs" />
     <Compile Include="CancellableExecutor.cs" />
+    <Compile Include="Common\DatabaseData.cs" />
     <Compile Include="Common\DetectorResult.cs" />
+    <Compile Include="Common\Person.cs" />
+    <Compile Include="Common\TimeCalculation.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\SynchronizeInvokeExtensions.cs" />
     <Compile Include="FileStorage\FileSystemDAL.cs" />
@@ -70,6 +77,15 @@
     <Compile Include="FileStorage\ImageLabel.cs" />
     <Compile Include="FileStorage\ITrainDataDAL.cs" />
     <Compile Include="FileStorage\LabelMap.cs" />
+    <Compile Include="Forms\ScheduleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ScheduleForm.Designer.cs">
+      <DependentUpon>ScheduleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.Schedule.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainWindow.Settings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,7 +96,9 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Modules\DetectionModule.cs" />
+    <Compile Include="Modules\IOverwatchModule.cs" />
     <Compile Include="Modules\IZoneModule.cs" />
+    <Compile Include="Modules\OverwatchModule.cs" />
     <Compile Include="Modules\RecognitionModuleEnum.cs" />
     <Compile Include="Modules\ImageProcessing.cs" />
     <Compile Include="MainWindow.cs">
@@ -99,6 +117,9 @@
     <Compile Include="Utilities\PathUtilities.cs" />
     <Compile Include="Utilities\ResourcesUtilities.cs" />
     <Compile Include="Utilities\WritablePropertiesOnlyResolver.cs" />
+    <EmbeddedResource Include="Forms\ScheduleForm.resx">
+      <DependentUpon>ScheduleForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -115,6 +136,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Models\deploy.prototxt" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Models\openface_nn4.small2.v1.t7" />
     <EmbeddedResource Include="Models\res10_300x300_ssd_iter_140000.caffemodel" />
     <None Include="packages.config" />

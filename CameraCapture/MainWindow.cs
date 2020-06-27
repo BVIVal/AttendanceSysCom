@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using CameraCapture.Common;
 using CameraCapture.Extensions;
 using CameraCapture.FileStorage;
+using CameraCapture.Forms;
 using CameraCapture.Modules;
 using CameraCapture.Utilities;
 using Emgu.CV;
@@ -44,10 +45,12 @@ namespace CameraCapture
         //ToDo: create ConfigClass
         private string _trainedModelPath = "Embeddings_";
         public const string _archivePath = "Archive/";
+        private const string dataBasePath = "MainDb.db";
         private HOGDescriptor hogDescriptor;
         private bool IsSnapshotRequested = false;
         private LabelMap labelMap;
 
+        private DetectorResult LastResult { get; set; }
         #endregion
 
         #region Events
@@ -64,6 +67,7 @@ namespace CameraCapture
         private DetectionModule Detector { get; set; }
         private RecognitionModule Recognizer { get; set; }
         private ITrainDataDAL TrainDataDAL { get; set; }
+        private OverwatchModule Overwatch { get; set; }
 
         public string FacesNum
         {
@@ -104,6 +108,8 @@ namespace CameraCapture
 
             PersonDetected += OnPersonDetected;
             Zone = ZoneModuleEnum.None;
+            Overwatch = new OverwatchModule(dataBasePath);
+            LastResult = new DetectorResult();
         }
 
         
@@ -158,13 +164,23 @@ namespace CameraCapture
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="detectorResult"></param>
-        private void OnPersonDetected(object sender, DetectorResult detectorResult)
+        private async void OnPersonDetected(object sender, DetectorResult detectorResult)
         {
             if (!IsRecognitionEnabled) return;
             var predictionInfo = Predict(ImageUtilities.ResizeMat(detectorResult.Image.Mat, Detector.RoiResizeValue));
             Log = predictionInfo.distance < minConfidence 
                 ? $@"Zone: {detectorResult.Zone}. Label: {predictionInfo.label}. Confidence: {predictionInfo.distance}. Time: {DateTime.Now.ToLongTimeString()}." 
                 : $@"Zone: {detectorResult.Zone}. LabelFailed: {predictionInfo.label}. Confidence: {predictionInfo.distance}";
+
+            if ((predictionInfo.distance > minConfidence || detectorResult.Zone == ZoneModuleEnum.None)) return;
+            detectorResult.Name = predictionInfo.label;
+
+            //ToDo: to do it normally)))
+            if (LastResult.Equals(detectorResult, LastResult)) return;
+            Log = $"Add to LiteDb";
+            LastResult = detectorResult.Clone() as DetectorResult;
+            await Overwatch.SendAsync(detectorResult);
+
         }
 
         private (double distance, string label) Predict(Mat mat)
@@ -379,6 +395,12 @@ namespace CameraCapture
         private void ExitZoneButton_Click(object sender, EventArgs e)
         {
             Zone = ZoneModuleEnum.ExitZone;
+        }
+
+        private void GetCollectionButton_Click(object sender, EventArgs e)
+        {
+            var collection = Overwatch.GetScheduleAsync();
+            ShowSchedule(collection);
         }
     }
 }

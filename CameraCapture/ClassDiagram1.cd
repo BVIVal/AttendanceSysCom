@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="CameraCapture.Algorithms.Settings">
+    <Position X="17.25" Y="9.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAACAAAAAAAAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>Algorithms\Settings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.CancellableExecutor">
+    <Position X="49.5" Y="5.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAQAAAAAAAAAAAAAAAAAIAAAAAAAgAAAABAAA=</HashCode>
+      <FileName>CancellableExecutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.MainWindow">
+    <Position X="10.25" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>6YLgECgOBiQgGJQgIj2BgSADBzgAAiAgggAFiIEYkOg=</HashCode>
+      <FileName>MainWindow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Program">
+    <Position X="20.25" Y="2.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Common.DatabaseData">
+    <Position X="29" Y="7.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Common\DatabaseData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Common.DetectorResult">
+    <Position X="29" Y="11.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgBAAAAAAAAAAAJAAAAAAAAAAADA=</HashCode>
+      <FileName>Common\DetectorResult.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CameraCapture.Common.Person">
+    <Position X="29" Y="9.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Person.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Extensions.StringExtensions">
+    <Position X="46.25" Y="3.75" Width="5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAIAAAA=</HashCode>
+      <FileName>Extensions\StringExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Extensions.SynchronizeInvokeExtensions">
+    <Position X="43" Y="6.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Extensions\SynchronizeInvokeExtensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.FileStorage.FileSystemDAL" BaseTypeListCollapsed="true">
+    <Position X="1" Y="2.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAQAABAAAAAAAAQAAEBAAAAAAAACAAAAAA=</HashCode>
+      <FileName>FileStorage\FileSystemDAL.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CameraCapture.FileStorage.ImageLabel">
+    <Position X="1" Y="5.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAEAAAAAAAAAA=</HashCode>
+      <FileName>FileStorage\ImageLabel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.FileStorage.LabelMap">
+    <Position X="5" Y="3.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileStorage\LabelMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Forms.SettingsForm">
+    <Position X="17.25" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>BBAAAAAAACAAABAABBCAAAgSAAAAAgIAgCAAJAAAAAA=</HashCode>
+      <FileName>Forms\SettingsForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Modules.DetectionModule" BaseTypeListCollapsed="true">
+    <Position X="29" Y="2.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAgAAAYAAYQBUAAAAAAAAAAEAQgAAAIAAAAEQA=</HashCode>
+      <FileName>Modules\DetectionModule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CameraCapture.Modules.ImageProcessing" BaseTypeListCollapsed="true">
+    <Position X="25" Y="2.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAgEAAgACAAAAAAAEQAAAAAQCAAAAAQIBAAAEAAACA=</HashCode>
+      <FileName>Modules\ImageProcessing.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CameraCapture.Modules.OverwatchModule">
+    <Position X="36.25" Y="2.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAQAAAABAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Modules\OverwatchModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Modules.RecognitionModule">
+    <Position X="33" Y="2.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAggAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Modules\RecognitionModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Modules.ZoneModule">
+    <Position X="33" Y="4.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>CABQAIAAgABAAAAAAgADAEAAAAICAAAkAQAAAAAAgAA=</HashCode>
+      <FileName>Modules\ZoneModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Properties.Resources">
+    <Position X="43" Y="3.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Properties.Settings">
+    <Position X="17.25" Y="7.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Utilities.ImageUtilities">
+    <Position X="46.25" Y="5.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAgAAAQAAAAAkAgCAAAAAgBAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utilities\ImageUtilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Utilities.JsonUtilities">
+    <Position X="48.75" Y="2.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACBAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utilities\JsonUtilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Utilities.PathUtilities">
+    <Position X="43" Y="7.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Utilities\PathUtilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Utilities.ResourcesUtilities">
+    <Position X="45.5" Y="2.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utilities\ResourcesUtilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Utilities.WritablePropertiesOnlyResolver">
+    <Position X="43" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Utilities\WritablePropertiesOnlyResolver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Common.TimeCalculation">
+    <Position X="13.25" Y="7" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\TimeCalculation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraCapture.Forms.ScheduleForm">
+    <Position X="13.25" Y="2.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAABgAAAACAgABACAACIAAACAAABABAAAAAABAAAAAA=</HashCode>
+      <FileName>Forms\ScheduleForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="CameraCapture.FileStorage.IImageDAL">
+    <Position X="5" Y="5.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAABAAAAAAAAAAAEBAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileStorage\IImageDAL.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CameraCapture.FileStorage.ITrainDataDAL">
+    <Position X="5" Y="2.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>FileStorage\ITrainDataDAL.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CameraCapture.Modules.IOverwatchModule">
+    <Position X="36.25" Y="4.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Modules\IOverwatchModule.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CameraCapture.Modules.IZoneModule">
+    <Position X="33" Y="9.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Modules\IZoneModule.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="CameraCapture.Modules.RecognitionModuleEnum">
+    <Position X="33" Y="11" Width="3" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Modules\RecognitionModuleEnum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CameraCapture.Modules.ZoneModuleEnum">
+    <Position X="33" Y="12.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAEAEAAAA=</HashCode>
+      <FileName>Modules\ZoneModuleEnum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

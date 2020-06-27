@@ -44,6 +44,7 @@
             this.LogLabel = new System.Windows.Forms.Label();
             this.EnterZoneButton = new System.Windows.Forms.Button();
             this.ExitZoneButton = new System.Windows.Forms.Button();
+            this.GetCollectionButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.camImageBox)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -138,7 +139,7 @@
             // 
             this.BtnGetSnapshot.Location = new System.Drawing.Point(662, 349);
             this.BtnGetSnapshot.Name = "BtnGetSnapshot";
-            this.BtnGetSnapshot.Size = new System.Drawing.Size(96, 23);
+            this.BtnGetSnapshot.Size = new System.Drawing.Size(119, 23);
             this.BtnGetSnapshot.TabIndex = 8;
             this.BtnGetSnapshot.Text = "Get snapshot";
             this.BtnGetSnapshot.UseVisualStyleBackColor = true;
@@ -192,11 +193,22 @@
             this.ExitZoneButton.UseVisualStyleBackColor = true;
             this.ExitZoneButton.Click += new System.EventHandler(this.ExitZoneButton_Click);
             // 
+            // GetCollectionButton
+            // 
+            this.GetCollectionButton.Location = new System.Drawing.Point(663, 379);
+            this.GetCollectionButton.Name = "GetCollectionButton";
+            this.GetCollectionButton.Size = new System.Drawing.Size(118, 23);
+            this.GetCollectionButton.TabIndex = 14;
+            this.GetCollectionButton.Text = "Get collection";
+            this.GetCollectionButton.UseVisualStyleBackColor = true;
+            this.GetCollectionButton.Click += new System.EventHandler(this.GetCollectionButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 516);
+            this.Controls.Add(this.GetCollectionButton);
             this.Controls.Add(this.ExitZoneButton);
             this.Controls.Add(this.EnterZoneButton);
             this.Controls.Add(this.LogLabel);
@@ -237,5 +249,6 @@
         private System.Windows.Forms.Label LogLabel;
         private System.Windows.Forms.Button EnterZoneButton;
         private System.Windows.Forms.Button ExitZoneButton;
+        private System.Windows.Forms.Button GetCollectionButton;
     }
 }
