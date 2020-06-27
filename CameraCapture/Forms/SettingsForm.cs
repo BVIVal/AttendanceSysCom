@@ -40,7 +40,7 @@ namespace CameraCapture.Forms
             }
             catch (Exception exception)
             {
-                MessageBox.Show($@"{nameof(SaveButton_Click)}. {exception}");
+                MessageBox.Show($@"{nameof(SaveButton_Click)}. {exception.Message}");
             }
         }
 
@@ -52,7 +52,7 @@ namespace CameraCapture.Forms
             }
             catch (Exception exception)
             {
-                MessageBox.Show($@"{nameof(SaveButton_Click)}. {exception}");
+                MessageBox.Show($@"{nameof(CancelButton_Click)}. {exception.Message}");
             }
         }
 
@@ -69,7 +69,7 @@ namespace CameraCapture.Forms
             }
             catch (Exception exception)
             {
-                MessageBox.Show($@"{nameof(OkButton_Click)}. {exception}");
+                MessageBox.Show($@"{nameof(OkButton_Click)}. {exception.Message}");
             }
         }
     }

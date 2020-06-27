@@ -21,12 +21,12 @@ namespace CameraCapture.Tests
         [DataRow("Archive/")]
         public void BaseRecognitionAlgoTest(string dataSubPath)
         {
-            FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.EigenFaceRecognizer, "Valentin_2.jpg", "Valentin", 0.0);
-            //FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.FisherFaceRecognizer, "Valentin_2.jpg", "Valentin", 0.0); //Fail - Egor
-            FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.LbphFaceRecognizer, "Valentin_2.jpg", "Valentin", 0.0);
-            FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.LbphFaceRecognizer, "Valentin_1.jpg", "Valentin", 0.0);
-            //FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.LbphFaceRecognizer, "Olya_1.jpg", "Olya", 0.0); // Fail - Valentin
-            //FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.LbphFaceRecognizer, "Egor_1.png", "Egor", 0.0); // Fail - Valentin
+            FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.EigenFaceRecognizer, "Valentin_2.jpg", "Valentin", 100.0);
+            FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.FisherFaceRecognizer, "Valentin_2.jpg", "Valentin", 100.0); //Fail - Egor
+            FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.LbphFaceRecognizer, "Valentin_2.jpg", "Valentin", 100.0);
+            FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.LbphFaceRecognizer, "Valentin_1.jpg", "Valentin", 100.0);
+            FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.LbphFaceRecognizer, "Olya_1.jpg", "Olya", 100.0); 
+            FaceRecognizerTest(dataSubPath, RecognitionModuleEnum.LbphFaceRecognizer, "Egor_1.png", "Egor", 100.0); // Fail - Valentin
         }
 
 
